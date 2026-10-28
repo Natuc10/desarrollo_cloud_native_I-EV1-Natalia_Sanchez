@@ -1,0 +1,245 @@
+/* Menú lateral principal */
+
+.sidebar {
+  width: 260px;
+  height: 100vh;
+
+  background-color: #245c4f;
+
+  display: flex;
+  flex-direction: column;
+
+  color: white;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  box-sizing: border-box;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* Encabezado */
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 30px 22px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+
+/* Logo */
+
+.logo {
+  width: 45px;
+  height: 45px;
+
+  background-color: #ffffff;
+  color: #245c4f;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  font-size: 25px;
+  font-weight: bold;
+
+  flex-shrink: 0;
+}
+
+
+/* Nombre del sistema */
+
+.brand h1 {
+  font-size: 20px;
+  font-weight: 600;
+
+  margin: 0;
+
+  color: white;
+}
+
+
+.brand p {
+  font-size: 11px;
+
+  margin: 5px 0 0;
+
+  color: #b8d8ce;
+}
+
+
+/* Navegación */
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  padding: 25px 15px;
+
+  flex: 1;
+}
+
+
+/* Opciones del menú */
+
+.nav-item {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 14px 16px;
+
+  color: #d4e7e0;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  border-radius: 8px;
+
+  transition: all 0.2s ease;
+}
+
+
+/* Iconos */
+
+.nav-item .material-symbols-outlined {
+  font-size: 22px;
+}
+
+
+/* Efecto al pasar el mouse */
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+
+  color: white;
+}
+
+
+/* Opción seleccionada */
+
+.nav-item.active {
+  background-color: #489b85;
+
+  color: white;
+
+  font-weight: 600;
+}
+
+
+/* Parte inferior */
+
+.sidebar-footer {
+  padding: 20px 15px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+
+/* Información del usuario */
+
+.user-info {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 10px 5px 20px;
+}
+
+
+/* Avatar */
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+
+  background-color: #489b85;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+}
+
+
+/* Datos del usuario */
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.user-details strong {
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.user-details span {
+  font-size: 11px;
+
+  color: #b8d8ce;
+}
+
+
+/* Botón cerrar sesión */
+
+.logout-button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 13px 16px;
+
+  background-color: transparent;
+
+  border: none;
+  border-radius: 8px;
+
+  color: #d4e7e0;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition: all 0.2s ease;
+}
+
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+
+  color: white;
+}
+
+
+.logout-button .material-symbols-outlined {
+  font-size: 22px;
+}

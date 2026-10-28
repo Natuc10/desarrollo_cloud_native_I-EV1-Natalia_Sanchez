@@ -1,0 +1,529 @@
+<div class="catalog-layout">
+
+  <!-- Menú lateral -->
+
+  <app-navbar></app-navbar>
+
+
+  <!-- Contenido principal -->
+
+  <main class="main-content">
+
+    <!-- Encabezado -->
+
+    <header class="page-header">
+
+      <div>
+
+        <h1>Catálogo de productos</h1>
+
+        <p>
+          Administra los productos disponibles en Pedidos360.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="abrirFormulario()"
+      >
+
+        <span class="material-symbols-outlined">
+          add
+        </span>
+
+        Agregar producto
+
+      </button>
+
+    </header>
+
+
+    <!-- Tarjetas de estadísticas -->
+
+    <section class="stats-container">
+
+      <div class="stat-card">
+
+        <div class="stat-icon total">
+
+          <span class="material-symbols-outlined">
+            inventory_2
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>Total de productos</p>
+
+          <h2>{{ totalProductos }}</h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon available">
+
+          <span class="material-symbols-outlined">
+            check_circle
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>Productos disponibles</p>
+
+          <h2>{{ productosDisponibles }}</h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon unavailable">
+
+          <span class="material-symbols-outlined">
+            error
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>Productos sin stock</p>
+
+          <h2>{{ productosSinStock }}</h2>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Tabla del catálogo -->
+
+    <section class="catalog-card">
+
+      <div class="catalog-header">
+
+        <div>
+
+          <h2>Productos registrados</h2>
+
+          <p>
+            Consulta y gestiona los productos del catálogo.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Buscador y filtros -->
+
+      <div class="filters-container">
+
+        <div class="search-box">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            aria-label="Buscar producto"
+            [(ngModel)]="busqueda"
+          >
+
+        </div>
+
+
+        <select
+          [(ngModel)]="categoriaSeleccionada"
+          aria-label="Filtrar por categoría"
+        >
+
+          <option value="">
+            Todas las categorías
+          </option>
+
+          @for (categoria of categorias; track categoria) {
+
+            <option [value]="categoria">
+              {{ categoria }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- Tabla -->
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Producto</th>
+
+              <th>Categoría</th>
+
+              <th>Precio</th>
+
+              <th>Stock</th>
+
+              <th>Estado</th>
+
+              <th>Acciones</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (producto of productosFiltrados; track producto.id) {
+
+              <tr>
+
+                <!-- Producto -->
+
+                <td>
+
+                  <div class="product-info">
+
+                    <div class="product-icon">
+
+                      <span class="material-symbols-outlined">
+                        restaurant
+                      </span>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ producto.nombre }}
+                      </strong>
+
+                      <small>
+                        {{ producto.descripcion }}
+                      </small>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- Categoría -->
+
+                <td>
+
+                  <span class="category-badge">
+                    {{ producto.categoria }}
+                  </span>
+
+                </td>
+
+
+                <!-- Precio -->
+
+                <td class="price">
+
+                  {{ producto.precio | currency:'CLP':'symbol':'1.0-0':'es-CL' }}
+
+                </td>
+
+
+                <!-- Stock -->
+
+                <td>
+
+                  {{ producto.stock }}
+
+                </td>
+
+
+                <!-- Estado -->
+
+                <td>
+
+                  @if (producto.stock > 0) {
+
+                    <span class="status-badge available">
+                      Disponible
+                    </span>
+
+                  } @else {
+
+                    <span class="status-badge unavailable">
+                      Sin stock
+                    </span>
+
+                  }
+
+                </td>
+
+
+                <!-- Acciones -->
+
+                <td>
+
+                  <div class="actions">
+
+                    <button
+                      type="button"
+                      class="action-button edit"
+                      title="Editar producto"
+                      [attr.aria-label]="'Editar ' + producto.nombre"
+                      (click)="editarProducto(producto)"
+                    >
+
+                      <span class="material-symbols-outlined">
+                        edit
+                      </span>
+
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="action-button delete"
+                      title="Eliminar producto"
+                      [attr.aria-label]="'Eliminar ' + producto.nombre"
+                      (click)="eliminarProducto(producto)"
+                    >
+
+                      <span class="material-symbols-outlined">
+                        delete
+                      </span>
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+
+                <td colspan="6" class="empty-message">
+
+                  No se encontraron productos.
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Formulario para agregar o editar productos -->
+
+  @if (mostrarFormulario) {
+
+    <div class="modal-overlay" (click)="cerrarFormulario()">
+
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div class="modal-header">
+
+          <h2 id="modal-title">
+
+            {{ modoEdicion ? 'Editar producto' : 'Agregar producto' }}
+
+          </h2>
+
+          <button
+            type="button"
+            class="close-button"
+            aria-label="Cerrar formulario"
+            (click)="cerrarFormulario()"
+          >
+
+            <span class="material-symbols-outlined">
+              close
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <form (ngSubmit)="guardarProducto()">
+
+          <div class="form-group">
+
+            <label for="nombre">
+              Nombre del producto
+            </label>
+
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="productoActual.nombre"
+              placeholder="Ej: Hamburguesa clásica"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="categoria">
+              Categoría
+            </label>
+
+            <select
+              id="categoria"
+              name="categoria"
+              [(ngModel)]="productoActual.categoria"
+              required
+            >
+
+              <option value="" disabled>
+                Selecciona una categoría
+              </option>
+
+              @for (categoria of categorias; track categoria) {
+
+                <option [value]="categoria">
+                  {{ categoria }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label for="precio">
+                Precio ($)
+              </label>
+
+              <input
+                type="number"
+                id="precio"
+                name="precio"
+                [(ngModel)]="productoActual.precio"
+                min="1"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="stock">
+                Stock disponible
+              </label>
+
+              <input
+                type="number"
+                id="stock"
+                name="stock"
+                [(ngModel)]="productoActual.stock"
+                min="0"
+                step="1"
+                required
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="descripcion">
+              Descripción
+            </label>
+
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              [(ngModel)]="productoActual.descripcion"
+              placeholder="Descripción del producto..."
+              rows="3"
+            ></textarea>
+
+          </div>
+
+
+          <div class="modal-actions">
+
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="cerrarFormulario()"
+            >
+              Cancelar
+            </button>
+
+
+            <button
+              type="submit"
+              class="btn-primary"
+            >
+
+              {{ modoEdicion ? 'Guardar cambios' : 'Agregar producto' }}
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

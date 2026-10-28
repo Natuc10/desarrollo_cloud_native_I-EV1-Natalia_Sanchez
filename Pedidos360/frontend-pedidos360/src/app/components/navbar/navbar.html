@@ -1,0 +1,97 @@
+<aside class="sidebar">
+
+  <!-- Logo del sistema -->
+  <div class="sidebar-header">
+
+    <div class="logo">
+      <span>P</span>
+    </div>
+
+    <div class="brand">
+      <h1>Pedidos360</h1>
+      <p>Gestión de pedidos</p>
+    </div>
+
+  </div>
+
+
+  <!-- Navegación -->
+  <nav class="sidebar-nav">
+
+    <!-- Disponible para Cliente, Operador y Administrador -->
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      class="nav-item"
+    >
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Inicio</span>
+    </a>
+
+
+    <!-- Disponible para Cliente, Operador y Administrador -->
+    <a
+      routerLink="/orders"
+      routerLinkActive="active"
+      class="nav-item"
+    >
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Pedidos</span>
+    </a>
+
+
+    <!-- Disponible solo para Operador y Administrador -->
+    @if (puedeVerCatalogo) {
+
+      <a
+        routerLink="/catalog"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="material-symbols-outlined">restaurant_menu</span>
+        <span>Catálogo</span>
+      </a>
+
+    }
+
+  </nav>
+
+
+  <!-- Parte inferior -->
+  <div class="sidebar-footer">
+
+    <div class="user-info">
+
+      <div class="user-avatar">
+        <span class="material-symbols-outlined">person</span>
+      </div>
+
+      <div class="user-details">
+
+        <!-- Nombre del usuario autenticado -->
+        <strong>{{ nombreUsuario }}</strong>
+
+        <!-- Rol asignado en Microsoft Entra ID -->
+        <span>{{ rolUsuario }}</span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Cerrar sesión -->
+    <button
+      type="button"
+      class="logout-button"
+      (click)="cerrarSesion()"
+    >
+
+      <span class="material-symbols-outlined">logout</span>
+
+      <span>Cerrar sesión</span>
+
+    </button>
+
+  </div>
+
+</aside>

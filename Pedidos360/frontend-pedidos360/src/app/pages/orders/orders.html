@@ -1,0 +1,758 @@
+<div class="orders-layout">
+
+  <!-- Menú lateral -->
+  <app-navbar></app-navbar>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+
+    <!-- Encabezado -->
+    <header class="page-header">
+
+      <div>
+
+        @if (esCliente) {
+
+          <h1>Mis pedidos</h1>
+
+          <p>
+            Consulta el estado de tus pedidos y realiza uno nuevo.
+          </p>
+
+        } @else {
+
+          <h1>Gestión de pedidos</h1>
+
+          <p>
+            Consulta y administra los pedidos realizados en Pedidos360.
+          </p>
+
+        }
+
+      </div>
+
+      <!-- Los tres roles pueden crear pedidos -->
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="abrirFormulario()"
+      >
+
+        <span class="material-symbols-outlined">
+          add
+        </span>
+
+        Nuevo pedido
+
+      </button>
+
+    </header>
+
+
+    <!-- Estadísticas -->
+    <section class="stats-container">
+
+      <!-- Total de pedidos -->
+      <div class="stat-card">
+
+        <div class="stat-icon total">
+
+          <span class="material-symbols-outlined">
+            receipt_long
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>
+            {{ esCliente ? 'Mis pedidos' : 'Total de pedidos' }}
+          </p>
+
+          <h2>{{ totalPedidos }}</h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- Pedidos pendientes -->
+      <div class="stat-card">
+
+        <div class="stat-icon pending">
+
+          <span class="material-symbols-outlined">
+            schedule
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>Pendientes</p>
+
+          <h2>{{ pedidosPendientes }}</h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- Pedidos en preparación -->
+      <div class="stat-card">
+
+        <div class="stat-icon preparing">
+
+          <span class="material-symbols-outlined">
+            restaurant
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>En preparación</p>
+
+          <h2>{{ pedidosPreparacion }}</h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- Pedidos entregados -->
+      <div class="stat-card">
+
+        <div class="stat-icon delivered">
+
+          <span class="material-symbols-outlined">
+            check_circle
+          </span>
+
+        </div>
+
+        <div class="stat-info">
+
+          <p>Entregados</p>
+
+          <h2>{{ pedidosEntregados }}</h2>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Listado de pedidos -->
+    <section class="orders-card">
+
+      <div class="orders-header">
+
+        <div>
+
+          @if (esCliente) {
+
+            <h2>Mis pedidos registrados</h2>
+
+            <p>
+              Visualiza tus pedidos y consulta sus estados.
+            </p>
+
+          } @else {
+
+            <h2>Pedidos registrados</h2>
+
+            <p>
+              Visualiza los pedidos de los clientes y gestiona sus estados.
+            </p>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- Buscador y filtros -->
+      <div class="filters-container">
+
+        <div class="search-box">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+          <input
+            type="text"
+            [placeholder]="esCliente
+              ? 'Buscar por número de pedido...'
+              : 'Buscar por número o cliente...'"
+            aria-label="Buscar pedido"
+            [(ngModel)]="busqueda"
+          >
+
+        </div>
+
+
+        <select
+          [(ngModel)]="estadoSeleccionado"
+          aria-label="Filtrar por estado"
+        >
+
+          <option value="">
+            Todos los estados
+          </option>
+
+          @for (estado of estados; track estado) {
+
+            <option [value]="estado">
+              {{ obtenerNombreEstado(estado) }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- Tabla de pedidos -->
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>N.º pedido</th>
+
+              <th>Cliente</th>
+
+              <th>Fecha</th>
+
+              <th>Productos</th>
+
+              <th>Total</th>
+
+              <th>Estado</th>
+
+              <th>Acciones</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (pedido of pedidosFiltrados; track pedido.id) {
+
+              <tr>
+
+                <!-- Número de pedido -->
+                <td class="order-number">
+
+                  #{{ pedido.id }}
+
+                </td>
+
+
+                <!-- Cliente -->
+                <td>
+
+                  <div class="customer-info">
+
+                    <div class="customer-avatar">
+
+                      <span class="material-symbols-outlined">
+                        person
+                      </span>
+
+                    </div>
+
+                    <strong>
+                      {{ pedido.cliente }}
+                    </strong>
+
+                  </div>
+
+                </td>
+
+
+                <!-- Fecha -->
+                <td>
+
+                  {{ pedido.fecha | date:'dd/MM/yyyy' }}
+
+                </td>
+
+
+                <!-- Productos -->
+                <td>
+
+                  <div class="products-info">
+
+                    @for (
+                      producto of pedido.productos;
+                      track producto.nombre
+                    ) {
+
+                      <span>
+
+                        {{ producto.cantidad }}x
+                        {{ producto.nombre }}
+
+                      </span>
+
+                    }
+
+                  </div>
+
+                </td>
+
+
+                <!-- Total -->
+                <td class="price">
+
+                  {{
+                    pedido.total |
+                    currency:'CLP':'symbol':'1.0-0':'es-CL'
+                  }}
+
+                </td>
+
+
+                <!-- Estado -->
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="pedido.estado.toLowerCase()"
+                  >
+
+                    {{ obtenerNombreEstado(pedido.estado) }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- Acciones -->
+                <td>
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    title="Ver detalle"
+                    [attr.aria-label]="
+                      'Ver detalle del pedido ' + pedido.id
+                    "
+                    (click)="verDetalle(pedido)"
+                  >
+
+                    <span class="material-symbols-outlined">
+                      visibility
+                    </span>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+
+                <td colspan="7" class="empty-message">
+
+                  @if (esCliente) {
+
+                    No tienes pedidos registrados.
+                    Puedes crear uno utilizando el botón
+                    «Nuevo pedido».
+
+                  } @else {
+
+                    No se encontraron pedidos.
+
+                  }
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Formulario para crear un pedido -->
+  @if (mostrarFormulario) {
+
+    <div
+      class="modal-overlay"
+      (click)="cerrarFormulario()"
+    >
+
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="nuevo-pedido-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- Encabezado del formulario -->
+        <div class="modal-header">
+
+          <h2 id="nuevo-pedido-title">
+            Crear nuevo pedido
+          </h2>
+
+          <button
+            type="button"
+            class="close-button"
+            aria-label="Cerrar formulario"
+            (click)="cerrarFormulario()"
+          >
+
+            <span class="material-symbols-outlined">
+              close
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <form (ngSubmit)="crearPedido()">
+
+          <!-- Nombre del cliente -->
+          <div class="form-group">
+
+            <label for="cliente">
+              Nombre del cliente
+            </label>
+
+            <input
+              type="text"
+              id="cliente"
+              name="cliente"
+              [(ngModel)]="nuevoPedido.cliente"
+              readonly
+            >
+
+          </div>
+
+
+          <!-- Seleccionar producto -->
+          <div class="form-group">
+
+            <label for="producto">
+              Producto
+            </label>
+
+            <select
+              id="producto"
+              name="producto"
+              [(ngModel)]="nuevoPedido.producto"
+              required
+            >
+
+              <option value="" disabled>
+                Selecciona un producto
+              </option>
+
+              @for (
+                producto of productosDisponibles;
+                track producto.nombre
+              ) {
+
+                <option [value]="producto.nombre">
+
+                  {{ producto.nombre }} -
+                  {{
+                    producto.precio |
+                    currency:'CLP':'symbol':'1.0-0':'es-CL'
+                  }}
+
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <!-- Cantidad -->
+          <div class="form-group">
+
+            <label for="cantidad">
+              Cantidad
+            </label>
+
+            <input
+              type="number"
+              id="cantidad"
+              name="cantidad"
+              [(ngModel)]="nuevoPedido.cantidad"
+              min="1"
+              step="1"
+              required
+            >
+
+          </div>
+
+
+          <!-- Total del pedido -->
+          <div class="order-total">
+
+            <span>Total del pedido</span>
+
+            <strong>
+
+              {{
+                totalNuevoPedido |
+                currency:'CLP':'symbol':'1.0-0':'es-CL'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- Botones del formulario -->
+          <div class="modal-actions">
+
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="cerrarFormulario()"
+            >
+
+              Cancelar
+
+            </button>
+
+
+            <button
+              type="submit"
+              class="btn-primary"
+            >
+
+              Crear pedido
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- Detalle del pedido -->
+  @if (mostrarDetalle && pedidoSeleccionado) {
+
+    <div
+      class="modal-overlay"
+      (click)="cerrarDetalle()"
+    >
+
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="detalle-pedido-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- Encabezado del detalle -->
+        <div class="modal-header">
+
+          <h2 id="detalle-pedido-title">
+
+            Detalle del pedido #{{ pedidoSeleccionado.id }}
+
+          </h2>
+
+          <button
+            type="button"
+            class="close-button"
+            aria-label="Cerrar detalle"
+            (click)="cerrarDetalle()"
+          >
+
+            <span class="material-symbols-outlined">
+              close
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- Información del pedido -->
+        <div class="detail-info">
+
+          <p>
+
+            <strong>Cliente:</strong>
+
+            {{ pedidoSeleccionado.cliente }}
+
+          </p>
+
+
+          <p>
+
+            <strong>Fecha:</strong>
+
+            {{
+              pedidoSeleccionado.fecha |
+              date:'dd/MM/yyyy'
+            }}
+
+          </p>
+
+
+          <p>
+
+            <strong>Estado actual:</strong>
+
+            <span
+              class="status-badge"
+              [ngClass]="pedidoSeleccionado.estado.toLowerCase()"
+            >
+
+              {{ obtenerNombreEstado(pedidoSeleccionado.estado) }}
+
+            </span>
+
+          </p>
+
+        </div>
+
+
+        <!-- Productos del pedido -->
+        <div class="detail-products">
+
+          <h3>Productos del pedido</h3>
+
+          @for (
+            producto of pedidoSeleccionado.productos;
+            track producto.nombre
+          ) {
+
+            <div class="detail-product">
+
+              <span>
+
+                {{ producto.cantidad }}x
+                {{ producto.nombre }}
+
+              </span>
+
+              <strong>
+
+                {{
+                  producto.precio * producto.cantidad |
+                  currency:'CLP':'symbol':'1.0-0':'es-CL'
+                }}
+
+              </strong>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- Total -->
+        <div class="order-total">
+
+          <span>Total</span>
+
+          <strong>
+
+            {{
+              pedidoSeleccionado.total |
+              currency:'CLP':'symbol':'1.0-0':'es-CL'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- Cambiar estado:
+             solo Operador y Administrador -->
+        @if (puedeGestionarEstados) {
+
+          <div class="change-status">
+
+            <h3>Actualizar estado</h3>
+
+            @if (
+              obtenerEstadosDisponibles(pedidoSeleccionado).length > 0
+            ) {
+
+              <div class="status-actions">
+
+                @for (
+                  estado of obtenerEstadosDisponibles(pedidoSeleccionado);
+                  track estado
+                ) {
+
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    (click)="cambiarEstado(pedidoSeleccionado, estado)"
+                  >
+
+                    {{ obtenerNombreEstado(estado) }}
+
+                  </button>
+
+                }
+
+              </div>
+
+            } @else {
+
+              <p class="final-status">
+
+                Este pedido no permite nuevos cambios de estado.
+
+              </p>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

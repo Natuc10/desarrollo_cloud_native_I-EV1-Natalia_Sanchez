@@ -1,0 +1,81 @@
+services:
+  rabbitmq-1:
+    image: rabbitmq:4.2-management
+    container_name: pedidos360-rabbitmq-1
+    hostname: rabbitmq-1
+    environment:
+      RABBITMQ_NODENAME: rabbit@rabbitmq-1
+      RABBITMQ_DEFAULT_USER: ev3admin
+      RABBITMQ_DEFAULT_PASS: ev3_local_demo
+      RABBITMQ_ERLANG_COOKIE: pedidos360_local_cookie_for_three_nodes
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    volumes:
+      - rabbitmq1_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks: [pedidos360-mq]
+
+  rabbitmq-2:
+    image: rabbitmq:4.2-management
+    container_name: pedidos360-rabbitmq-2
+    hostname: rabbitmq-2
+    environment:
+      RABBITMQ_NODENAME: rabbit@rabbitmq-2
+      RABBITMQ_DEFAULT_USER: ev3admin
+      RABBITMQ_DEFAULT_PASS: ev3_local_demo
+      RABBITMQ_ERLANG_COOKIE: pedidos360_local_cookie_for_three_nodes
+    ports:
+      - "127.0.0.1:5673:5672"
+      - "127.0.0.1:15673:15672"
+    volumes:
+      - rabbitmq2_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    depends_on:
+      rabbitmq-1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks: [pedidos360-mq]
+
+  rabbitmq-3:
+    image: rabbitmq:4.2-management
+    container_name: pedidos360-rabbitmq-3
+    hostname: rabbitmq-3
+    environment:
+      RABBITMQ_NODENAME: rabbit@rabbitmq-3
+      RABBITMQ_DEFAULT_USER: ev3admin
+      RABBITMQ_DEFAULT_PASS: ev3_local_demo
+      RABBITMQ_ERLANG_COOKIE: pedidos360_local_cookie_for_three_nodes
+    ports:
+      - "127.0.0.1:5674:5672"
+      - "127.0.0.1:15674:15672"
+    volumes:
+      - rabbitmq3_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    depends_on:
+      rabbitmq-1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks: [pedidos360-mq]
+
+networks:
+  pedidos360-mq:
+    driver: bridge
+
+volumes:
+  rabbitmq1_data:
+  rabbitmq2_data:
+  rabbitmq3_data:

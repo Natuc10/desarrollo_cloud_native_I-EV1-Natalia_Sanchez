@@ -1,0 +1,186 @@
+/* Contenedor principal */
+
+.dashboard-layout {
+  min-height: 100vh;
+  background-color: #f5f7f6;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* Contenido principal */
+
+.main-content {
+  margin-left: 260px;
+  padding: 40px;
+}
+
+
+/* Encabezado */
+
+.page-header {
+  margin-bottom: 35px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  color: #245c4f;
+  margin: 0 0 10px;
+}
+
+.page-header p {
+  font-size: 15px;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+
+/* Sección de estadísticas */
+
+.dashboard-section {
+  width: 100%;
+}
+
+.section-header {
+  margin-bottom: 22px;
+}
+
+.section-header h2 {
+  font-size: 20px;
+  color: #354b45;
+  margin: 0 0 8px;
+}
+
+.section-header p {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+}
+
+
+/* Contenedor de tarjetas */
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+
+/* Tarjetas */
+
+.stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  min-height: 155px;
+  padding: 22px;
+  background-color: #ffffff;
+  border: 1px solid #e3eae6;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+
+/* Iconos */
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.stat-icon .material-symbols-outlined {
+  font-size: 25px;
+}
+
+.stat-icon.total {
+  background-color: #e5f3ee;
+  color: #367c6b;
+}
+
+.stat-icon.pending {
+  background-color: #fff4dd;
+  color: #a66b00;
+}
+
+.stat-icon.preparing {
+  background-color: #e7f0fc;
+  color: #426fa6;
+}
+
+.stat-icon.dispatched {
+  background-color: #ede9fa;
+  color: #7453a6;
+}
+
+.stat-icon.delivered {
+  background-color: #e5f3ee;
+  color: #367c6b;
+}
+
+.stat-icon.cancelled {
+  background-color: #fde9e9;
+  color: #b94a48;
+}
+
+
+/* Información de cada tarjeta */
+
+.stat-info {
+  min-width: 0;
+}
+
+.stat-info p {
+  margin: 0 0 12px;
+  color: #6c757d;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.stat-info h3 {
+  margin: 0 0 10px;
+  color: #354b45;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.stat-info span {
+  display: block;
+  color: #8a9490;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* Diseño adaptable */
+
+@media (max-width: 1250px) {
+
+  .stats-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .main-content {
+    margin-left: 0;
+    padding: 25px 20px;
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+}

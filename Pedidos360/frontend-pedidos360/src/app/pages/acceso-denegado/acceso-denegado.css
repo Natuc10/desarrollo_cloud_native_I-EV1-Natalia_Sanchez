@@ -1,0 +1,203 @@
+/* Contenedor principal */
+
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #489b85;
+  padding: 30px 15px;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* Tarjeta de error */
+
+.error-card {
+  width: 100%;
+  max-width: 500px;
+  background-color: #ffffff;
+  padding: 45px 40px;
+  border-radius: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+
+/* Icono principal */
+
+.error-icon {
+  width: 65px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  background-color: #489b85;
+  color: #ffffff;
+  border-radius: 15px;
+}
+
+.error-icon .material-symbols-outlined {
+  font-size: 34px;
+}
+
+
+/* Código de error */
+
+.error-label {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #367c6b;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+
+/* Título */
+
+.error-card h1 {
+  margin: 0 0 15px;
+  color: #354b45;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+
+/* Descripción */
+
+.error-description {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* Mensaje informativo */
+
+.error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 16px;
+  background-color: #f1f7f5;
+  border: 1px solid #d5e8e1;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.error-message .material-symbols-outlined {
+  flex-shrink: 0;
+  color: #367c6b;
+  font-size: 22px;
+}
+
+.error-message p {
+  margin: 0;
+  color: #495057;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* Contenedor de botones */
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+
+/* Estilos compartidos de botones */
+
+.error-actions a,
+.error-actions button {
+  flex: 1;
+  min-height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.2s;
+}
+
+.error-actions .material-symbols-outlined {
+  font-size: 19px;
+}
+
+
+/* Botón secundario: volver al inicio */
+
+.secondary-button {
+  background-color: #ffffff;
+  border: 1px solid #adb5bd;
+  color: #343a40;
+}
+
+.secondary-button:hover {
+  background-color: #f1f3f5;
+}
+
+
+/* Botón principal: cerrar sesión */
+
+.primary-button {
+  background-color: #489b85;
+  border: 1px solid #489b85;
+  color: #ffffff;
+}
+
+.primary-button:hover {
+  background-color: #367c6b;
+}
+
+
+/* Pie de la tarjeta */
+
+.error-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 30px;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.error-footer .material-symbols-outlined {
+  font-size: 17px;
+  color: #489b85;
+}
+
+
+/* Diseño adaptable */
+
+@media (max-width: 480px) {
+
+  .error-card {
+    padding: 35px 25px;
+  }
+
+  .error-card h1 {
+    font-size: 24px;
+  }
+
+  .error-actions {
+    flex-direction: column;
+  }
+
+}

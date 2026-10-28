@@ -1,0 +1,296 @@
+<div class="dashboard-layout">
+
+  <!-- Menú lateral -->
+  <app-navbar></app-navbar>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+
+    <!-- Encabezado -->
+    <header class="page-header">
+
+      <h1>Bienvenido a Pedidos360</h1>
+
+      @if (rolUsuario === 'CLIENTE') {
+
+        <p>
+          Consulta el resumen de tus pedidos y revisa su estado.
+        </p>
+
+      } @else if (rolUsuario === 'OPERADOR') {
+
+        <p>
+          Consulta el estado de los pedidos y las tareas pendientes.
+        </p>
+
+      } @else if (rolUsuario === 'ADMINISTRADOR') {
+
+        <p>
+          Consulta el resumen general de la gestión de pedidos.
+        </p>
+
+      }
+
+    </header>
+
+
+    <!-- Dashboard del Cliente -->
+    @if (rolUsuario === 'CLIENTE') {
+
+      <section class="dashboard-section">
+
+        <div class="section-header">
+          <h2>Resumen de mis pedidos</h2>
+          <p>Información de los pedidos asociados a tu cuenta.</p>
+        </div>
+
+        <div class="stats-container">
+
+          <article class="stat-card">
+
+            <div class="stat-icon total">
+              <span class="material-symbols-outlined">
+                receipt_long
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Mis pedidos</p>
+              <h3>—</h3>
+              <span>Total de pedidos realizados</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon pending">
+              <span class="material-symbols-outlined">
+                schedule
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Pendientes</p>
+              <h3>—</h3>
+              <span>Pedidos pendientes de aceptación</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon preparing">
+              <span class="material-symbols-outlined">
+                restaurant
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>En preparación</p>
+              <h3>—</h3>
+              <span>Pedidos que están siendo preparados</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon delivered">
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Entregados</p>
+              <h3>—</h3>
+              <span>Pedidos que ya recibiste</span>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- Dashboard del Operador -->
+    @if (rolUsuario === 'OPERADOR') {
+
+      <section class="dashboard-section">
+
+        <div class="section-header">
+          <h2>Resumen operativo</h2>
+          <p>Estado general de los pedidos que requieren gestión.</p>
+        </div>
+
+        <div class="stats-container">
+
+          <article class="stat-card">
+
+            <div class="stat-icon pending">
+              <span class="material-symbols-outlined">
+                pending_actions
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Por aceptar</p>
+              <h3>—</h3>
+              <span>Pedidos nuevos pendientes de aceptación</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon preparing">
+              <span class="material-symbols-outlined">
+                restaurant
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>En preparación</p>
+              <h3>—</h3>
+              <span>Pedidos que están siendo preparados</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon dispatched">
+              <span class="material-symbols-outlined">
+                local_shipping
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Despachados</p>
+              <h3>—</h3>
+              <span>Pedidos enviados para su entrega</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon delivered">
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Entregados</p>
+              <h3>—</h3>
+              <span>Pedidos cuya entrega finalizó</span>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- Dashboard del Administrador -->
+    @if (rolUsuario === 'ADMINISTRADOR') {
+
+      <section class="dashboard-section">
+
+        <div class="section-header">
+          <h2>Resumen general</h2>
+          <p>Indicadores generales de los pedidos de Pedidos360.</p>
+        </div>
+
+        <div class="stats-container">
+
+          <article class="stat-card">
+
+            <div class="stat-icon total">
+              <span class="material-symbols-outlined">
+                receipt_long
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Total de pedidos</p>
+              <h3>—</h3>
+              <span>Pedidos registrados en el sistema</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon pending">
+              <span class="material-symbols-outlined">
+                pending_actions
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Pedidos activos</p>
+              <h3>—</h3>
+              <span>Pedidos que aún no han finalizado</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon delivered">
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Entregados</p>
+              <h3>—</h3>
+              <span>Pedidos entregados correctamente</span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-icon cancelled">
+              <span class="material-symbols-outlined">
+                cancel
+              </span>
+            </div>
+
+            <div class="stat-info">
+              <p>Cancelados</p>
+              <h3>—</h3>
+              <span>Pedidos que fueron cancelados</span>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+  </main>
+
+</div>

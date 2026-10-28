@@ -1,0 +1,55 @@
+<main class="error-page">
+
+  <section class="error-card">
+
+    <div class="error-icon">
+      <span class="material-symbols-outlined">lock</span>
+    </div>
+
+    <span class="error-label">ERROR 403</span>
+
+    <h1>Acceso denegado</h1>
+
+    <p class="error-description">
+      Tu cuenta de Microsoft se ha autenticado correctamente,
+      pero no tiene los permisos necesarios para acceder
+      a esta sección de Pedidos360.
+    </p>
+
+    <div class="error-message">
+
+      <span class="material-symbols-outlined">info</span>
+
+      <p>
+        Si necesitas acceder, solicita al administrador
+        que te asigne el rol correspondiente.
+      </p>
+
+    </div>
+
+    <div class="error-actions">
+
+      <a routerLink="/login" class="secondary-button">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Volver al inicio
+      </a>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="cerrarSesion()"
+      >
+        <span class="material-symbols-outlined">logout</span>
+        Cerrar sesión
+      </button>
+
+    </div>
+
+    <div class="error-footer">
+      <span class="material-symbols-outlined">verified_user</span>
+      <span>Pedidos360 · Acceso seguro</span>
+    </div>
+
+  </section>
+
+</main>
