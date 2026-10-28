@@ -1,0 +1,23 @@
+INTEGRACIÓN MANUAL EN TU BFF EXISTENTE (NO SOBREESCRIBIR ARCHIVOS LOCALES):
+
+1. Agregar ESTA dependencia dentro de <dependencies> en:
+   Pedidos360/ms-pedidos360-bff/pom.xml
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+
+2. Al FINAL de Pedidos360/ms-pedidos360-bff/src/main/resources/application.properties:
+
+spring.rabbitmq.addresses=localhost:5672,localhost:5673,localhost:5674
+spring.rabbitmq.username=ev3admin
+spring.rabbitmq.password=ev3_local_demo
+pedidos360.rabbit.exchange=pedidos360.events
+pedidos360.rabbit.routing-key=order.created
+
+3. Copiar las 3 clases Java de la carpeta Pedidos360/ms-pedidos360-bff/.
+4. Mantener SecurityConfig y el issuer-uri tal como estaban, para usar JWT.
+5. POST /api/orders/events requiere Bearer JWT de Microsoft Entra ID.
+
+NO modificar el pom.xml ni properties originales sustituyéndolos completamente.

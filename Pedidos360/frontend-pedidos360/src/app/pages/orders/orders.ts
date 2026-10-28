@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { API_SCOPE } from '../../app.config';
 
 import { Navbar } from '../../components/navbar/navbar';
 
@@ -66,10 +69,14 @@ export class Orders implements OnInit {
 
   sesionCargada: boolean = false;
 
+  // Evita publicar dos veces el mismo evento por doble clic.
+  enviandoPedido: boolean = false;
+
 
   constructor(
     private msalService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
+    private msalBroadcastService: MsalBroadcastService,
+    private http: HttpClient
   ) {}
 
 
@@ -415,11 +422,11 @@ export class Orders implements OnInit {
   }
 
 
-  // Crear pedido localmente
+  // Crear un pedido y publicar su evento en el BFF protegido con JWT.
+  // El listado sigue siendo temporal en Angular (sin persistencia en BD).
+  async crearPedido(): Promise<void> {
 
-  crearPedido(): void {
-
-    if (!this.sesionCargada || !this.rolUsuario) {
+    if (!this.sesionCargada || !this.rolUsuario || this.enviandoPedido) {
       return;
     }
 
@@ -430,41 +437,74 @@ export class Orders implements OnInit {
       !Number.isInteger(this.nuevoPedido.cantidad) ||
       this.nuevoPedido.cantidad <= 0
     ) {
-
       alert('Completa correctamente los datos del pedido.');
-
       return;
+    }
 
+    const cuenta =
+      this.msalService.instance.getActiveAccount()
+      ?? this.msalService.instance.getAllAccounts()[0];
+
+    if (!cuenta) {
+      alert('Debes iniciar sesion con Microsoft.');
+      return;
     }
 
     const nuevo: Pedido = {
-
       id: Math.max(1000, ...this.pedidos.map(p => p.id)) + 1,
-
-      // El cliente se obtiene de la cuenta autenticada
       cliente: this.nombreUsuario,
-
       propietarioId: this.propietarioId,
-
       fecha: new Date().toISOString().split('T')[0],
-
-      productos: [
-        {
-          nombre: producto.nombre,
-          cantidad: this.nuevoPedido.cantidad,
-          precio: producto.precio
-        }
-      ],
-
+      productos: [{
+        nombre: producto.nombre,
+        cantidad: this.nuevoPedido.cantidad,
+        precio: producto.precio
+      }],
       total: this.totalNuevoPedido,
-
       estado: 'CREADO'
-
     };
 
-    this.pedidos.unshift(nuevo);
+    this.enviandoPedido = true;
 
-    this.cerrarFormulario();
+    try {
+      // El Access Token se solicita a Microsoft Entra ID; no se escribe a mano.
+      const resultado = await this.msalService.instance.acquireTokenSilent({
+        account: cuenta,
+        scopes: [API_SCOPE]
+      });
+
+      // El BFF validara el JWT y enviara el evento a RabbitMQ.
+      // Se agrega una marca de tiempo para identificar el evento en los logs.
+      const respuesta = await firstValueFrom(
+        this.http.post(
+          'http://localhost:8080/api/orders/events',
+          {
+            orderId: `ORD-${nuevo.id}-${Date.now()}`,
+            customerName: nuevo.cliente,
+            failureMode: 'OK'
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${resultado.accessToken}`
+            },
+            responseType: 'text'
+          }
+        )
+      );
+
+      console.log('Respuesta del BFF:', respuesta);
+
+      // Solo mostrar el pedido cuando la API acepte su publicacion.
+      this.pedidos.unshift(nuevo);
+      this.cerrarFormulario();
+      alert('Evento del pedido publicado correctamente.');
+
+    } catch (error) {
+      console.error('Error al publicar el pedido en el BFF:', error);
+      alert('No se pudo publicar el pedido. Revisa la consola (F12).');
+    } finally {
+      this.enviandoPedido = false;
+    }
 
   }
 
